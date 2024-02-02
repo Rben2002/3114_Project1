@@ -162,6 +162,17 @@ public class Rectangle {
      * @return true if the rectangle has invalid parameters, false if not
      */
     public boolean isInvalid() {
-        return width < 0 || height < 0 || xCoordinate < 0 || yCoordinate < 0;
+        // Check if width or height are not greater than 0
+        if (width <= 0 || height <= 0) {
+            return true;
+        }
+        
+        // Check if the rectangle is out of the world box
+        if (xCoordinate < 0 || yCoordinate < 0 || 
+            xCoordinate + width > 1024 || yCoordinate + height > 1024) {
+            return true;
+        }
+    
+        return false;
     }
 }
