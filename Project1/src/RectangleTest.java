@@ -179,10 +179,24 @@ public class RectangleTest {
         Rectangle rec2 = new Rectangle(1, 5, 2, 2);
         Rectangle rec4 = new Rectangle(45, 45, 1, 50);
         Rectangle rec3 = new Rectangle(50, 50, 20, 20);
+        
+        Rectangle rec5 = new Rectangle(50, 50, 50, 50);
+        Rectangle rec6 = new Rectangle(1, 50, 1, 5);
+        
 
         // Assert that intersect() returns false
         assertFalse(rec1.intersect(rec2));
         assertFalse(rec4.intersect(rec3));
+        assertFalse(rec5.intersect(rec6));
+        
+        Rectangle rec7 = new Rectangle(50, 50, 50, 50);
+        Rectangle rec8 = new Rectangle(50, 1, 50, 1);
+        
+        assertFalse(rec7.intersect(rec8));
+        
+        Rectangle rec9 = new Rectangle(50, 15, 2, 2);
+        Rectangle rec10 = new Rectangle(20, 10, 31, 6);
+        assertTrue(rec9.intersect(rec10));
     }
 
 
