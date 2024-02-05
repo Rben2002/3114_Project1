@@ -94,13 +94,13 @@ public class Rectangle {
     	// Calculate x and y coordinates of the corners for both rectangles
         int x1 = this.getxCoordinate();
         int y1 = this.getyCoordinate();
-        int x2 = x1 + this.getWidth();
-        int y2 = y1 + this.getHeight();
+        int x2 = this.getxCoordinate() + this.getWidth();
+        int y2 = this.getyCoordinate() + this.getHeight();
         
         int x3 = r2.getxCoordinate();
         int y3 = r2.getyCoordinate();
-        int x4 = x3 + r2.getWidth();
-        int y4 = y3 + r2.getHeight();
+        int x4 = r2.getxCoordinate() + r2.getWidth();
+        int y4 = r2.getyCoordinate() + r2.getHeight();
         
         // Check for overlap along the x-axis
         boolean xOverlap = x1 < x4 && x2 > x3;
@@ -130,10 +130,11 @@ public class Rectangle {
             return false; // If the object is null or of different class, return false
         }
         Rectangle other = (Rectangle) rec; // Cast the Object to Rectangle type
-        return xCoordinate == other.getxCoordinate() &&
-               yCoordinate == other.getyCoordinate() &&
-               width == other.getWidth() &&
-               height == other.getHeight();
+        boolean checkOne = xCoordinate == other.getxCoordinate() &&
+                yCoordinate == other.getyCoordinate();
+        boolean checkTwo = width == other.getWidth() &&
+                height == other.getHeight();
+        return checkOne && checkTwo;
     }
 
 
@@ -145,14 +146,18 @@ public class Rectangle {
      *         rectangle
      */
     public String toString() {
-    	String Result = "X: ";
+    	String result = "X: ";
     	
-    	Result += Integer.toString(getxCoordinate());
-    	Result += ", Y: " + Integer.toString(getyCoordinate());
-    	Result += ", Width: " + Integer.toString(getWidth());
-    	Result += ", Height: " + Integer.toString(getHeight());
+    	result += Integer.toString(getxCoordinate());
+    	result += ", Y: " + Integer.toString(getyCoordinate());
+    	result += ", Width: " + Integer.toString(getWidth());
+    	result += ", Height: " + Integer.toString(getHeight());
     	
-        return Result;
+        return result;
+        
+        // Ask office hours about naming, like is there a specific format
+        // to output in this since we cant access the name of the 
+        // rectangle object since its not a member variable
     }
 
 
@@ -162,17 +167,13 @@ public class Rectangle {
      * @return true if the rectangle has invalid parameters, false if not
      */
     public boolean isInvalid() {
-        // Check if width or height are not greater than 0
-        if (width <= 0 || height <= 0) {
-            return true;
-        }
-        
+    	// Check if width or height are not greater than 0
+       
         // Check if the rectangle is out of the world box
-        if (xCoordinate < 0 || yCoordinate < 0 || 
-            xCoordinate + width > 1024 || yCoordinate + height > 1024) {
-            return true;
-        }
+        return (xCoordinate < 0 || yCoordinate < 0 || 
+            xCoordinate + width > 1024 || yCoordinate + height > 1024 
+            || width <= 0 || height <= 0);
     
-        return false;
+        
     }
 }
