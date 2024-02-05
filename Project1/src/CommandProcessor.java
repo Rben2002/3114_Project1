@@ -50,7 +50,12 @@ public class CommandProcessor {
         // parameters by converting the string integers into
         // their Integer equivalent, trimming the whitespace
         if (command.equals("insert")) {
-            //Calls insert
+            String name = arr[1];
+            int x = Integer.parseInt(arr[2]);
+            int y = Integer.parseInt(arr[3]);
+            int w = Integer.parseInt(arr[4]);
+            int h = Integer.parseInt(arr[5]);
+            data.insert(name, x, y, w, h);
         }
         // calls the appropriate remove method based on the
         // number of white space delimited strings in the line
@@ -59,11 +64,16 @@ public class CommandProcessor {
             int numParam = arr.length - 1;
             if (numParam == 1) {
                 // Calls remove by name
-                
+                String name = arr[1];
+                data.remove(name);
             }
             else if (numParam == 4) {
-                // Calls remove by coordinate, converting string
-                // integers into their Integer equivalent minus whitespace
+                // Calls remove by coordinates
+                int x = Integer.parseInt(arr[1]);
+                int y = Integer.parseInt(arr[2]);
+                int w = Integer.parseInt(arr[3]);
+                int h = Integer.parseInt(arr[4]);
+                data.remove(x, y, w, h);
                 
             }
             
@@ -71,20 +81,27 @@ public class CommandProcessor {
         else if (command.equals("regionsearch")) {
             // calls the regionsearch method for a set of coordinates
             // the string integers in the line will be trimmed of whitespace
+            int x = Integer.parseInt(arr[1]);
+            int y = Integer.parseInt(arr[2]);
+            int w = Integer.parseInt(arr[4]);
+            int h = Integer.parseInt(arr[4]);
+            data.regionsearch(x, y, w, h);
 
         }
         else if (command.equals("intersections")) {
             // calls the intersections method, no parameters to be passed
             // (see the intersections JavaDoc in the Database class for more information)
+            data.intersections();
            
         }
         else if (command.equals("search")) {
              // calls the search method for a name of object
+            String name = arr[1];
+            data.search(name);
            
         }
         else if (command.equals("dump")) {
-            // calls the dump method for the database, takes no parameters
-            // (see the dump() JavaDoc in the Database class for more information)
+            data.dump();
 
         }
         else {

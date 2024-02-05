@@ -71,6 +71,36 @@ public class SkipList<K extends Comparable<? super K>, V> implements Iterable<KV
      */
     @SuppressWarnings("unchecked")
     public void insert(KVPair<K, V> it) {
+        int level = randomLevel();
+        SkipNode newNode = new SkipNode(it, level);
+        
+        if (level > head.level) {
+            adjustHead(level);
+        }
+        
+        SkipNode current = head;
+        SkipNode[] update = (SkipNode[])Array.newInstance(SkipList.SkipNode.class, level + 1);
+        
+        for (int i = 0; i <= level; i++) {
+            update[i] = head;
+        }
+        
+        for (int i = head.level; i>= 0; i--) {
+            while (current.forward[i] != null && current.forward[i].pair.getKey().compareTo(it.getKey()) < 0) {
+                current = current.forward[i];
+            }
+            if (i <= level) {
+                update[i] = current;
+            }
+        }
+        
+        //Update pointers
+        for (int i = 0; i <= level; i++) {
+            newNode.forward[i] = update[i].forward[i];
+            update[i].forward[i] = newNode;
+        }
+        
+        size++;
         
     }
 
@@ -84,7 +114,10 @@ public class SkipList<K extends Comparable<? super K>, V> implements Iterable<KV
      */
     @SuppressWarnings("unchecked")
     public void adjustHead(int newLevel) {
-        
+        SkipNode[] newForward = (SkipNode[])Array.newInstance(SkipList.SkipNode.class,  newLevel + 1);
+        System.arraycopy(head.forward,  0,  newForward,  0,  head.forward.length);
+        head.forward = newForward;
+        head.level = newLevel;
     }
 
 
@@ -119,6 +152,15 @@ public class SkipList<K extends Comparable<? super K>, V> implements Iterable<KV
      * Prints out the SkipList in a human readable format to the console.
      */
     public void dump() {
+        System.out.println("SkipList dump:");
+        SkipNode current = head.forward[0];
+        int index = 0;
+        while (current != null) {
+            System.out.println("node " + index + ": " + current.pair.toString() + " Level: " + current.level);
+            current = current.forward[0];
+            index++;
+        }
+        System.out.println("SkipList size is: " + size);
   
     }
 

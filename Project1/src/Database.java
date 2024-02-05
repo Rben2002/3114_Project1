@@ -48,10 +48,18 @@ public class Database {
      * @param pair
      *            the KVPair to be inserted
      */
-    public void insert(KVPair<String, Rectangle> pair) {
+    public void insert(String name, int x, int y, int w, int h) {
         // Delegates the decision mostly to SkipList, only
         // writing the correct message to the console from
         // that
+       if (w > 0 && h > 0 && x >= 0 && y >= 0) {
+          Rectangle rectangle = new Rectangle(x, y, w, h);
+          KVPair<String, Rectangle> pair = new KVPair<>(name, rectangle);
+          list.insert(pair);
+          System.out.println("Rectangle inserted: (" + name + ", " + x + ", " + y + ", " + w + ", " + h + ")");
+        } else {
+            System.out.println("Rectangle rejected: (" + name + ", " + x + ", " + y + ", " + w + ", " + h + ")");
+        }
 
     }
 
@@ -134,6 +142,8 @@ public class Database {
      * will all be delegated to the SkipList.
      */
     public void dump() {
+        System.out.println("SkipList dump: ");
+        list.dump();
         
     }
 
