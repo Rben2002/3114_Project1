@@ -57,7 +57,8 @@ public class CommandProcessor {
             int w = Integer.parseInt(arr[4]);
             int h = Integer.parseInt(arr[5]);
             Rectangle insertRec = new Rectangle(x, y, w, h);
-            KVPair<String, Rectangle> insertPair = new KVPair(name, insertRec);
+            KVPair<String, Rectangle> insertPair = 
+            new KVPair<String, Rectangle>(name, insertRec);
             data.insert(insertPair);
         }
         // calls the appropriate remove method based on the
