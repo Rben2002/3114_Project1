@@ -15,7 +15,7 @@ import java.util.Random;
  * @param <V>
  *            Value
  */
-public class SkipList<K extends Comparable<? super K>, V> implements Iterable<KVPair<K,V>> {
+public class SkipList<K extends Comparable<? super K>, V> implements Iterable<KVPair<K, V>> {
     private SkipNode head; // First element (Sentinel Node)
     private int size; // number of entries in the Skip List
 
@@ -48,6 +48,9 @@ public class SkipList<K extends Comparable<? super K>, V> implements Iterable<KV
      * 
      * @param key
      *            key to be searched for
+     * @return ArrayList<KVPair<K, V>>
+     *            List of every rectangle with that name
+     *        
      */
     public ArrayList<KVPair<K, V>> search(K key) {
         return null;
@@ -71,21 +74,21 @@ public class SkipList<K extends Comparable<? super K>, V> implements Iterable<KV
      */
     @SuppressWarnings("unchecked")
     public void insert(KVPair<K, V> it) {
-        int level = randomLevel();
+    	int level = randomLevel();
         SkipNode newNode = new SkipNode(it, level);
-        
+
         if (level > head.level) {
             adjustHead(level);
         }
-        
+
         SkipNode current = head;
         SkipNode[] update = (SkipNode[])Array.newInstance(SkipList.SkipNode.class, level + 1);
-        
+
         for (int i = 0; i <= level; i++) {
             update[i] = head;
         }
-        
-        for (int i = head.level; i>= 0; i--) {
+
+        for (int i = head.level; i >= 0; i--) {
             while (current.forward[i] != null && current.forward[i].pair.getKey().compareTo(it.getKey()) < 0) {
                 current = current.forward[i];
             }
@@ -93,15 +96,14 @@ public class SkipList<K extends Comparable<? super K>, V> implements Iterable<KV
                 update[i] = current;
             }
         }
-        
+
         //Update pointers
         for (int i = 0; i <= level; i++) {
             newNode.forward[i] = update[i].forward[i];
             update[i].forward[i] = newNode;
         }
-        
+
         size++;
-        
     }
 
 
@@ -114,7 +116,7 @@ public class SkipList<K extends Comparable<? super K>, V> implements Iterable<KV
      */
     @SuppressWarnings("unchecked")
     public void adjustHead(int newLevel) {
-        SkipNode[] newForward = (SkipNode[])Array.newInstance(SkipList.SkipNode.class,  newLevel + 1);
+    	SkipNode[] newForward = (SkipNode[])Array.newInstance(SkipList.SkipNode.class,  newLevel + 1);
         System.arraycopy(head.forward,  0,  newForward,  0,  head.forward.length);
         head.forward = newForward;
         head.level = newLevel;
@@ -125,12 +127,11 @@ public class SkipList<K extends Comparable<? super K>, V> implements Iterable<KV
      * Removes the KVPair that is passed in as a parameter and returns true if
      * the pair was valid and false if not.
      * 
-     * @param pair
+     * @param key
      *            the KVPair to be removed
-     * @return returns the removed pair if the pair was valid and null if not
+     * @return KVPair<K, V>
+     *          returns the removed pair if the pair was valid and null if not
      */
-
-    
     @SuppressWarnings("unchecked")
     public KVPair<K, V> remove(K key) {
         return null;
@@ -152,7 +153,7 @@ public class SkipList<K extends Comparable<? super K>, V> implements Iterable<KV
      * Prints out the SkipList in a human readable format to the console.
      */
     public void dump() {
-        System.out.println("SkipList dump:");
+    	System.out.println("SkipList dump:");
         SkipNode current = head.forward[0];
         int index = 0;
         while (current != null) {
@@ -161,7 +162,6 @@ public class SkipList<K extends Comparable<? super K>, V> implements Iterable<KV
             index++;
         }
         System.out.println("SkipList size is: " + size);
-  
     }
 
     /**
@@ -232,7 +232,7 @@ public class SkipList<K extends Comparable<? super K>, V> implements Iterable<KV
     }
 
 	@Override
-	public Iterator<KVPair<K,V>> iterator() {
+	public Iterator<KVPair<K, V>> iterator() {
 		// TODO Auto-generated method stub
 		return new SkipListIterator();
 	}
