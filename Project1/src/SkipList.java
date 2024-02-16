@@ -18,6 +18,7 @@ import java.util.Random;
 public class SkipList<K extends Comparable<? super K>, V> implements Iterable<KVPair<K, V>> {
     private SkipNode head; // First element (Sentinel Node)
     private int size; // number of entries in the Skip List
+    private int level; //Highest level of the skiplist
 
     /**
      * Initializes the fields head, size and level
@@ -25,6 +26,7 @@ public class SkipList<K extends Comparable<? super K>, V> implements Iterable<KV
     public SkipList() {
         head = new SkipNode(null, 0);
         size = 0;
+        level = 0;
     }
 
 
@@ -53,8 +55,21 @@ public class SkipList<K extends Comparable<? super K>, V> implements Iterable<KV
      *        
      */
     public ArrayList<KVPair<K, V>> search(K key) {
-        return null;
+        ArrayList<KVPair<K, V>> resultList = new ArrayList<>();
+        SkipNode x = head;
+        for (int i = level; i >= 0; i--) {
+        while ((x.forward[i] != null) && (x.forward[i].pair.getKey().compareTo (key) < 0)) {
+            x = x.forward[i];
+            }
+        }
+        x = x.forward[0];
+        while (x != null && x.pair.getKey().compareTo(key) == 0) {
+            resultList.add(x.pair);
+            x = x.forward[0];
+        }
+        return resultList;
     }
+    
 
 
     /**
@@ -81,14 +96,15 @@ public class SkipList<K extends Comparable<? super K>, V> implements Iterable<KV
             adjustHead(level);
         }
 
+       
+        SkipNode[] update = ((SkipNode[])Array.newInstance(SkipList.SkipNode.class,  level +1));
         SkipNode current = head;
-        SkipNode[] update = (SkipNode[])Array.newInstance(SkipList.SkipNode.class, level + 1);
 
         for (int i = 0; i <= level; i++) {
             update[i] = head;
         }
 
-        for (int i = head.level; i >= 0; i--) {
+        for (int i = this.level; i >= 0; i--) {
             while (current.forward[i] != null && current.forward[i].pair.getKey().compareTo(it.getKey()) < 0) {
                 current = current.forward[i];
             }
@@ -120,6 +136,7 @@ public class SkipList<K extends Comparable<? super K>, V> implements Iterable<KV
         System.arraycopy(head.forward,  0,  newForward,  0,  head.forward.length);
         head.forward = newForward;
         head.level = newLevel;
+        this.level = newLevel;
     }
 
 
