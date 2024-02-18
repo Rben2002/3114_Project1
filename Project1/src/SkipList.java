@@ -151,6 +151,28 @@ public class SkipList<K extends Comparable<? super K>, V> implements Iterable<KV
      */
     @SuppressWarnings("unchecked")
     public KVPair<K, V> remove(K key) {
+        SkipNode current = head;
+        SkipNode[] update = (SkipNode[]) Array.newInstance(SkipList.SkipNode.class, head.level + 1);
+
+        //Finding the Node
+        for (int i = head.level; i >= 0; i--) {
+            while (current.forward[i] != null && current.forward[i].element().getKey().compareTo(key) <0) {
+                current = current.forward[i];
+            }
+            update [i] = current;
+        }
+        current = current.forward[0];
+
+        if (current != null && current.element().getKey().equals(key)) {
+            for (int i = 0; i <= head.level && update[i].forward[i] == current; i++) {
+                update[i].forward[i] = current.forward[i];
+
+            }
+            while (head.level > 0 && head.forward[head.level]== null) {
+                head.level--;
+            }
+            return current.element();
+        }
         return null;
     }
   
@@ -162,8 +184,30 @@ public class SkipList<K extends Comparable<? super K>, V> implements Iterable<KV
      * @return returns true if the removal was successful
      */
     public KVPair<K, V> removeByValue(V val) {
-  
+        SkipNode current = head;
+        SkipNode[] update = (SkipNode[]) Array.newInstance(SkipList.SkipNode.class, head.level + 1);
+
+        for (int i = head.level; i >= 0; i--) {
+            while (current.forward[i] != null && !current.forward[i].element().getValue().equals(val)) {
+                current = current.forward[i];
+            }
+            update[i] = current;
+        }
+
+        current = current.forward[0];
+
+        if (current != null && current.element().getValue().equals(val)) {
+            for (int i = 0; i <= head.level && update[i].forward[i] == current; i++) {
+                update[i].forward[i] = current.forward[i];
+
+            }
+            while (head.level > 0 && head.forward[head.level]== null) {
+                head.level--;
+            }
+            return current.element();
+        }
         return null;
+
     }
 
     /**
